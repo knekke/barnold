@@ -19,7 +19,8 @@ import bpy
 import bgl
 from mathutils import Matrix, Vector, geometry
 
-from . import arnold
+sys.path.append('/home/thomas/opt/Arnold-4.2.12.3-linux/python')
+import arnold
 
 from ..nodes import (
     ArnoldNode,
@@ -391,6 +392,10 @@ def _export_object_properties(ob, node):
     arnold.AiNodeSetBool(node, "invert_normals", props.invert_normals)
     arnold.AiNodeSetBool(node, "opaque", props.opaque)
     arnold.AiNodeSetBool(node, "matte", props.matte)
+    arnold.AiNodeSetFlt(node, "disp_height", props.disp_height)
+    arnold.AiNodeSetFlt(node, "disp_padding", props.disp_padding)
+    arnold.AiNodeSetFlt(node, "disp_zero_value", props.disp_zero_value)
+    arnold.AiNodeSetBool(node, "disp_autobump", props.disp_autobump)
     if props.subdiv_type != 'none':
         arnold.AiNodeSetStr(node, "subdiv_type", props.subdiv_type)
         arnold.AiNodeSetByte(node, "subdiv_iterations", props.subdiv_iterations)

@@ -274,6 +274,7 @@ class ArnoldNodeOutput(_NodeOutput, Node):
     def init(self, context):
         super().init(context)
         self.inputs.new("NodeSocketShader", "Shader", "shader")
+        self.inputs.new("NodeSocketShader", "Displacement", "displacement")
 
 
 @ArnoldRenderEngine.register_class

@@ -647,11 +647,45 @@ class ArnoldShape(PropertyGroup):
         name="Smooth Tangents"
     )
     #NODE[]        disp_map                          (empty)
-    #FLOAT         disp_padding                      0
     #FLOAT         disp_height                       1
+    #FLOAT         disp_padding                      0
     #FLOAT         disp_zero_value                   0
     #BOOL          disp_autobump                     false
     #BYTE          autobump_visibility               159
+    
+    disp_height = FloatProperty(
+        name="Height",
+        default=1
+    )
+    disp_padding = FloatProperty(
+        name="Bounds Padding",
+        default=0
+    )
+    disp_zero_value = FloatProperty(
+        name="Zero Value",
+        default=0
+    )
+    disp_autobump = BoolProperty(
+        name="AutoBump",
+        default=False
+    )
+
+    #       // new (2.2) displacement parameters at object's level
+    #   xsiLayout.AddGroup("Displacement", true);
+    #      item = xsiLayout.AddItem("disp_height", "Height");
+    #      item.setAttribute(siUILabelMinPixels, 130);
+    #      item.SetAttribute(siUILabelPercentage, 50);
+    #      item = xsiLayout.AddItem("disp_padding", "Bounds Padding");
+    #      item.setAttribute(siUILabelMinPixels, 130);
+    #      item.SetAttribute(siUILabelPercentage, 50);
+    #      item = xsiLayout.AddItem("disp_zero_value", "Zero Value");
+    #      item.setAttribute(siUILabelMinPixels, 130);
+    #      item.SetAttribute(siUILabelPercentage, 50);
+    #      item = xsiLayout.AddItem("disp_autobump", "AutoBump");
+    #   xsiLayout.EndGroup();
+  
+
+
     visibility = IntProperty(
         name="Visibility",
         default=255
@@ -770,6 +804,9 @@ class ArnoldShape(PropertyGroup):
         **_sidedness(1 << 5)
     )
  
+
+
+
     @classmethod
     def register(cls):
         Object.arnold = PointerProperty(type=cls)

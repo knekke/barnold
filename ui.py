@@ -364,6 +364,14 @@ class ArnoldObjectPanel(_ObjectPanel, Panel):
         flow.prop(props, "sidedness_diffuse")
         flow.prop(props, "sidedness_glossy")
 
+        col = layout.column()
+        col.label("Displacement:")
+        flow = col.column_flow()
+        flow.prop(props, "disp_height")
+        flow.prop(props, "disp_padding")
+        flow.prop(props, "disp_zero_value")
+        flow.prop(props, "disp_autobump")
+
 
 @ArnoldRenderEngine.register_class
 class ArnoldSubdivisionPanel(_ObjectPanel, Panel):
@@ -383,6 +391,8 @@ class ArnoldSubdivisionPanel(_ObjectPanel, Panel):
         col.prop(props, "subdiv_adaptive_space")
         col.prop(props, "subdiv_uv_smoothing")
         col.prop(props, "subdiv_smooth_derivs")
+
+
 
 ##
 ## Lights
