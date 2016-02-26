@@ -19,6 +19,7 @@ import bpy
 import bgl
 from mathutils import Matrix, Vector, geometry
 
+# CHOSE THIS PATH IN THE ADDON PREFERENCES
 sys.path.append('/home/thomas/opt/Arnold-4.2.12.3-linux/python')
 import arnold
 

@@ -405,6 +405,11 @@ class ArnoldNodeStandard(ArnoldNode):
         self.outputs.new("NodeSocketShader", "RGB", "output")
         self.create_socket("Kd_color")
         self.create_socket("Kd")
+        self.create_socket("diffuse_roughness")
+        self.create_socket("Ks_color")
+        self.create_socket("Ks")
+        self.create_socket("specular_roughness")
+
 
     def draw_buttons_ext(self, context, layout):
         inputs = self.inputs

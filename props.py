@@ -450,10 +450,12 @@ class ArnoldOptions(PropertyGroup):
         default=1
     )
     GI_diffuse_depth = IntProperty(
-        name="Diffuse"
+        name="Diffuse",
+        default=2
     )
     GI_glossy_depth = IntProperty(
-        name="Glossy"
+        name="Glossy",
+        default=2
     )
     GI_reflection_depth = IntProperty(
         name="Reflection",
