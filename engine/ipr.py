@@ -6,6 +6,7 @@ __email__ = "nildar@users.sourceforge.net"
 import sys
 import numpy
 import mmap
+import os
 
 ABORT = 1
 UPDATE = 2
@@ -38,6 +39,10 @@ def ipr():
 
     return _exec
 
+def _rect(n, w, h):
+    with open(n, "r+b") as f:
+        tmp = mmap.mmap(f.fileno(), w * h * 4 * 4)
+    return numpy.frombuffer(tmp, dtype=numpy.float32).reshape([h, w, 4])
 
 def _worker(data, new_data, redraw_event, mmap_size, mmap_name, state):
     print("+++ _worker: started")
@@ -131,9 +136,6 @@ def _worker(data, new_data, redraw_event, mmap_size, mmap_name, state):
 
         del nodes, nptrs, links, data
 
-        _rect = lambda n, w, h: numpy.frombuffer(
-            mmap.mmap(-1, w * h * 4 * 4, n), dtype=numpy.float32
-        ).reshape([h, w, 4])
         rect = _rect(mmap_name, *mmap_size)
 
         def _callback(x, y, width, height, buffer, data):
@@ -206,6 +208,10 @@ def _worker(data, new_data, redraw_event, mmap_size, mmap_name, state):
         arnold.AiEnd()
     print("+++ _worker: finished")
 
+def touch(fname, times=None):
+    with open(fname, 'a') as f:
+        f.truncate(64 * 1024 * 1024)
+
 
 def _main():
     import multiprocessing as _mp
@@ -219,10 +225,13 @@ def _main():
     #logger = _mp.log_to_stderr()
     #logger.setLevel(logging.INFO)
 
-    global _engine_, _data_, _width_, _height_, _mmap_size_, _mmap_
+    global _engine_, _data_, _width_, _height_, _mmap_size_, _mmap_, _mmap_name
 
-    _mmap_name = "blender/barnold/ipr/pid-%d" % id(_engine_)
-    _mmap_ = mmap.mmap(-1, 64 * 1024 * 1024, _mmap_name)  # 64Mb
+    _mmap_name = "pid-%d" % id(_engine_)
+    print(os.getcwd())
+    touch(_mmap_name)
+    with open(_mmap_name,'r+b') as f:
+        _mmap_ = mmap.mmap(f.fileno(), 64 * 1024 * 1024)  # 64Mb
 
     state = _mp.Value('i', 0)
     redraw_event = _mp.Event()
@@ -236,7 +245,7 @@ def _main():
             del e
 
     def _mmap_size(opts):
-        global _mmap_
+        global _mmap_, _mmap_name
         m = max(_width_, _height_)
         if m > 300:
             c = 900 / (m + 600)
@@ -245,7 +254,8 @@ def _main():
         else:
             w = _width_
             h = _height_
-        _mmap_ = mmap.mmap(-1, w * h * 4 * 4, _mmap_name)
+        with open(_mmap_name,'r+b') as f:
+            _mmap_ = mmap.mmap(f.fileno(), w * h * 4 * 4)
         opts['xres'] = ('INT', w)
         opts['yres'] = ('INT', h)
         return w, h
